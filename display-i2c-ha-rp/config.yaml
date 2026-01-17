@@ -1,0 +1,22 @@
+name: "I2C System Display"
+version: "1.0.0"
+slug: "display-i2c-ha-rp"
+description: "Zeigt CPU, RAM, Temperatur und Home Assistant Status auf einem I2C 128x64 Display"
+startup: services
+
+# WICHTIG: Erzwingt lokalen Build
+build: true
+image: "local/display-i2c-ha-rp"
+
+arch:
+  - armv7
+  - aarch64
+  - amd64
+
+devices:
+  - /dev/i2c-1
+
+homeassistant_api: true
+
+options: {}
+schema: {}
