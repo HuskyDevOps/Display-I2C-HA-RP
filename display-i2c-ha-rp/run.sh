@@ -1,6 +1,7 @@
 #!/usr/bin/with-contenv bashio
 
-echo "Starte I2C Display Skript..."
-# Wechsel in das Arbeitsverzeichnis
-cd /app
-python3 display.py
+echo "--- I2C Diagnose ---"
+i2cdetect -y 1 || echo "Bus nicht erreichbar"
+
+echo "--- Starte App ---"
+python3 /app/display.py
