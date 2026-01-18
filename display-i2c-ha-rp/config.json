@@ -12,6 +12,9 @@
   "devices": [
     "/dev/i2c-1"
   ],
+  "privileged": [
+    "SYS_RAWIO"
+  ],
   "homeassistant_api": true,
   "options": {},
   "schema": {}
