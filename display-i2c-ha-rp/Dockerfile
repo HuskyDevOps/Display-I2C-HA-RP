@@ -1,15 +1,11 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base:latest
+ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-python:3.12-alpine3.19
 FROM $BUILD_FROM
 
-# Installiere System-Abhängigkeiten und Build-Tools
+# System-Abhängigkeiten
 RUN apk add --no-cache \
-    python3 \
-    py3-pip \
     i2c-tools \
-    # Notwendig zum Kompilieren von Python-Modulen (z.B. Pillow oder SMBus)
     build-base \
     python3-dev \
-    # Grafik-Bibliotheken für Pillow (I2C Displays brauchen oft Bilder/Fonts)
     jpeg-dev \
     zlib-dev \
     freetype-dev \
@@ -19,20 +15,14 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Kopiere Anforderungen und installiere sie
-# --break-system-packages ist in neueren Alpine/Python-Versionen oft nötig
+# Python-Pakete installieren
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Kopiere das Skript
+# Skript und Starter kopieren
 COPY display.py .
-
-# Starte das Skript
-CMD [ "python3", "/app/display.py" ]
-
-# ... (restliches Dockerfile wie zuvor)
-
 COPY run.sh /
 RUN chmod a+x /run.sh
 
+# Start-Befehl
 CMD [ "/run.sh" ]
