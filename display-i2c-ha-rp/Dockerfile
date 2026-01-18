@@ -29,3 +29,10 @@ COPY display.py .
 
 # Starte das Skript
 CMD [ "python3", "/app/display.py" ]
+
+# ... (restliches Dockerfile wie zuvor)
+
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+CMD [ "/run.sh" ]
