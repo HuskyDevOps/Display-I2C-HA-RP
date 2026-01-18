@@ -1,38 +1,29 @@
 ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base:latest
 FROM $BUILD_FROM
 
-# Installiere System-Abhängigkeiten und Build-Tools
+# Abhängigkeiten installieren
 RUN apk add --no-cache \
     python3 \
     py3-pip \
     i2c-tools \
-    # Notwendig zum Kompilieren von Python-Modulen (z.B. Pillow oder SMBus)
     build-base \
     python3-dev \
-    # Grafik-Bibliotheken für Pillow (I2C Displays brauchen oft Bilder/Fonts)
     jpeg-dev \
     zlib-dev \
-    freetype-dev \
-    lcms2-dev \
-    openjpeg-dev \
-    tiff-dev
+    freetype-dev
 
 WORKDIR /app
 
-# Kopiere Anforderungen und installiere sie
-# --break-system-packages ist in neueren Alpine/Python-Versionen oft nötig
+# Python Pakete
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
-# Kopiere das Skript
+# Skripte kopieren
 COPY display.py .
-
-# Starte das Skript
-CMD [ "python3", "/app/display.py" ]
-
-# ... (restliches Dockerfile wie zuvor)
-
 COPY run.sh /
 RUN chmod a+x /run.sh
 
+# DAS IST DER ENTSCHEIDENDE TEIL:
+# Wir überschreiben NICHT den Entrypoint des Base-Images,
+# sondern nutzen CMD, um unser Skript dem s6-init-System zu übergeben.
 CMD [ "/run.sh" ]
