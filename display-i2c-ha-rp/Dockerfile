@@ -25,4 +25,8 @@ COPY run.sh /
 RUN chmod a+x /run.sh
 
 # Start-Befehl
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+# Verwende den SHELL-Form-Aufruf nicht, sondern bleibe beim Standard für S6
 CMD [ "/run.sh" ]
